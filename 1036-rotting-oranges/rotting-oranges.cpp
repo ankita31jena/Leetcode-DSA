@@ -4,6 +4,8 @@ public:
         int n = grid.size();
         int m = grid[0].size();
 
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
         queue<pair<pair<int, int>, int>> q;
         int fresh = 0;
 
@@ -11,6 +13,7 @@ public:
             for (int j = 0; j < m; j++) {
                 if (grid[i][j] == 2) {
                     q.push({{i, j}, 0});
+                    vis[i][j] = 2;
                 }
                 else if (grid[i][j] == 1) {
                     fresh++;
@@ -37,9 +40,10 @@ public:
 
                 if (newRow >= 0 && newRow < n &&
                     newCol >= 0 && newCol < m &&
-                    grid[newRow][newCol] == 1) {
+                    grid[newRow][newCol] == 1 &&
+                    vis[newRow][newCol] != 2) {
 
-                    grid[newRow][newCol] = 2;
+                    vis[newRow][newCol] = 2;
                     fresh--;
 
                     q.push({{newRow, newCol}, t + 1});
@@ -47,7 +51,7 @@ public:
             }
         }
 
-        if (fresh > 0)
+        if (fresh != 0)
             return -1;
 
         return time;
